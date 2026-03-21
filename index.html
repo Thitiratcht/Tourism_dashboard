@@ -71,20 +71,17 @@ table{width:100%;border-collapse:collapse;font-size:12px}
     </style>
 </head>
 <body>
-
 <div class="header">
     <div>
         <h1>🌏 Climate & Environmental Factors on Tourism in Thailand</h1>
         <p>Regression Analysis Dashboard — 12 Provinces | R² ≥ 0.6 | p &lt; 0.05</p>
     </div>
 </div>
-
 <div class="main-tabs">
     <div class="main-tab active" onclick="switchTab(0)">📊 Overview</div>
     <div class="main-tab" onclick="switchTab(1)">🏛️ Province Detail</div>
     <div class="main-tab" onclick="switchTab(2)">💰 Tourism Revenue Focus</div>
 </div>
-
 <div id="tab0" class="tab-content active">
     <div style="max-width:1400px;margin:0 auto;padding:20px">
         <div id="rankingBoxes"></div>
@@ -95,7 +92,6 @@ table{width:100%;border-collapse:collapse;font-size:12px}
         </div>
     </div>
 </div>
-
 <div id="tab1" class="tab-content">
     <div style="max-width:1280px;margin:0 auto;padding:20px">
         <div class="card">
@@ -105,7 +101,6 @@ table{width:100%;border-collapse:collapse;font-size:12px}
         <div id="detContent"></div>
     </div>
 </div>
-
 <div id="tab2" class="tab-content">
     <div style="max-width:1280px;margin:0 auto;padding:20px">
         <div class="card">
@@ -115,7 +110,6 @@ table{width:100%;border-collapse:collapse;font-size:12px}
         <div id="trContent"></div>
     </div>
 </div>
-
 <script>
 var PROV_FULL={BKK:"Bangkok",HKT:"Phuket",KBV:"Krabi",CNX:"Chiang Mai",CRI:"Chiang Rai",CBI:"Chonburi",SNI:"Surat Thani",PKN:"Prachuap Khiri Khan",RYG:"Rayong",NMA:"Nakhon Ratchasima",UBP:"Ubon Ratchathani",SKA:"Songkhla"};
 var Y_FULL={Temp:"Average Temperature (Celsius)",Rain:"Monthly Precipitation (mm)",PM:"Avg. PM 2.5 Level (µg/m³)",TA:"Tourist Arrivals",ThaiTA:"Tourist Arrivals (Thai)",ForTA:"Tourist Arrivals (Foreigners)",LOS:"Length of Stay",ThaiLOS:"Length of Stay (Thai)",ForLOS:"Length of Stay (Foreigners)",EXP:"Average Expenditure (Baht/Person/Day)",ThaiEXP:"Average Expenditure (Baht/Person/Day) (Thai)",ForEXP:"Average Expenditure (Baht/Person/Day) (Foreigners)",TR:"Tourism Revenue",ThaiTR:"Tourism Revenue (Thai)",ForTR:"Tourism Revenue (Foreigners)"};
@@ -126,9 +120,7 @@ var Y_FREQ={LOS:15,ForLOS:13,ThaiTA:10,TA:9,ForEXP:8,ThaiEXP:8,ThaiLOS:7,ThaiTR:
 var ALL_PROVS=["BKK","HKT","KBV","CNX","CRI","CBI","SNI","PKN","RYG","NMA","UBP","SKA"];
 var rankedProvs=ALL_PROVS.filter(function(p){return PROV_COUNTS[p]>0}).sort(function(a,b){return PROV_COUNTS[b]-PROV_COUNTS[a]});
 var noModel=ALL_PROVS.filter(function(p){return PROV_COUNTS[p]===0});
-
 function mks(n,base,amp){var d=[];for(var i=0;i<n;i++){var v=base+Math.sin(i*0.5)*amp;d.push({idx:i+1,actual:+(v+(Math.random()-0.5)*amp*0.4).toFixed(3),predicted:+v.toFixed(3)})}return d}
-
 var MODELS={
   PKN:[
     {y_var:"ForEXP",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.8418,adj_r2:0.8267,f_stat:55.8659,f_p:3.9e-9,n:24,error_df:21,dw:1.9668,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[1.929303,0.069175,1.554946],se:[0.627182,0.008453,0.185201],t_stats:[3.0761,8.1837,8.396],p_vals:[0.005729,0.0,0.0],scatter:[{idx:1,actual:10.2,predicted:10.3},{idx:2,actual:10.1,predicted:10.1},{idx:3,actual:12.1,predicted:12.0},{idx:4,actual:11.2,predicted:11.2},{idx:5,actual:11.5,predicted:11.5},{idx:6,actual:11.4,predicted:11.3},{idx:7,actual:13.0,predicted:12.9},{idx:8,actual:12.9,predicted:12.9},{idx:9,actual:14.1,predicted:14.0},{idx:10,actual:15.3,predicted:15.3},{idx:11,actual:14.9,predicted:15.1},{idx:12,actual:16.0,predicted:15.9},{idx:13,actual:15.2,predicted:15.2},{idx:14,actual:16.8,predicted:16.8},{idx:15,actual:17.2,predicted:17.1},{idx:16,actual:17.6,predicted:17.5},{idx:17,actual:18.5,predicted:18.4},{idx:18,actual:18.0,predicted:18.2},{idx:19,actual:19.1,predicted:19.0},{idx:20,actual:20.2,predicted:20.1},{idx:21,actual:19.8,predicted:20.0},{idx:22,actual:21.0,predicted:21.1},{idx:23,actual:21.5,predicted:21.4},{idx:24,actual:22.0,predicted:22.1}]},
@@ -172,7 +164,6 @@ var MODELS={
   ],
   CRI:[],CBI:[],UBP:[]
 };
-
 var TR_MODELS={
   CNX:[
     {y_var:"ThaiTR",type:"Quadratic",x_vars:["X1(Temp)"],data_freq:"Quarterly",r2:0.7698,adj_r2:0.7478,f_stat:35.1038,f_p:2.0e-7,n:24,error_df:21,dw:2.1164,var_names:["Constant","X1(Temp)","X1(Temp)²"],coefs:[42495162985.37,-2862758654.35,49701671.74],se:[7600000000,554000000,10060000],t_stats:[5.5909,-5.1668,4.9415],p_vals:[0.000015,0.00004,0.000069],scatter:mks(24,6.5,0.8)},
@@ -188,7 +179,6 @@ var TR_MODELS={
     {y_var:"ForTR",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.612,adj_r2:0.575,f_stat:16.6,f_p:4.5e-5,n:24,error_df:21,dw:1.45,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[28.8,0.042,-6.1],se:[5.5,0.016,1.1],t_stats:[5.24,2.63,-5.55],p_vals:[0.00004,0.016,0.00002],scatter:mks(24,20.5,0.4)}
   ]
 };
-
 var RECS={
   PKN:{region:"Western Gulf Coast",context:["Regression models identify coastal weather quality — notably sea surface conditions and beach accessibility — as significant drivers of monthly tourist arrivals in Hua Hin district.","Structural quality of coastal infrastructure correlates positively with accommodation occupancy rates."],projects:[{name:"Coastal Erosion Protection (Engineering)",status:"In Progress / Under Repair",desc:"Seawall and embankment works at Mae Ramphueng Beach, Prachuap Khiri Khan Bay, and Bang Saphan Noi Canal."},{name:"Basic 5A Improvement in Hua Hin",status:"Planned",desc:"Upgrading the five tourism pillars — Attraction, Access, Accommodation, Amenities, Activities — outside the Hua Hin urban core."}],recommendations:[{title:"Integrate coastal protection with beach-quality branding",body:"The engineering works at Mae Ramphueng and Prachuap Bay should be accompanied by post-construction beach-quality assessments (sand depth, water clarity, debris removal) and communicated to travel trade partners."},{title:"Extend 5A investment beyond Hua Hin to Bang Saphan",body:"The 5A upgrade plan is concentrated near Hua Hin. Bang Saphan district — where coastal protection works are ongoing — offers an underdeveloped 'eco-coastal' tourism niche."},{title:"Seasonal resilience planning",body:"PKN experiences significant monsoon-season arrival drops. Pair the coastal engineering investments with monsoon-season programming (kitesurfing, cultural festivals) to smooth seasonality."},{title:"Erosion-repair timeline transparency",body:"Publish projected completion dates and interim access plans for each repair site. Uncertainty around beach closures suppresses advance bookings."}],gap:"No current projects address air quality or extreme heat, which are emerging PKN risk factors as urban heat island effects intensify in Hua Hin."},
   CNX:{region:"Northern Thailand",context:["OLS and log-log regression models establish statistically significant negative relationships between PM2.5 concentration and tourist arrivals, and between maximum daily temperature and hospitality revenue.","A 10% reduction in monthly average PM2.5 is associated with a measurable increase in inbound visitor nights.","The haze season (February–April) is the single largest structural drag on Chiang Mai's tourism economy."],projects:[{name:"AirForAll — Burn Reduction for Clean Air",status:"Active (High Intensity)",desc:"Big-data platform linking hotspot data, burned area, and health statistics at Doi Suthep-Pui National Park."},{name:"Envi Link Database (8 Northern Provinces)",status:"Expanding",desc:"Centralised, real-time dust data aggregation from Air4Thai and Check Dust."},{name:"5-Month Absolute Burning Ban (Mae Chaem)",status:"Ongoing",desc:"Agricultural transition away from open burning of crop residue."},{name:"Chiang Mai Low Carbon City (Net Zero 2065)",status:"Active Strategy",desc:"Multi-sector GHG reduction and urban heat-island mitigation."},{name:"Green Space Expansion (Heat Island Mitigation)",status:"Research & Policy Push",desc:"Efficiency studies of urban green spaces for cooling."},{name:"Upstream Forest Restoration (CP Group / Ping River)",status:"Ongoing",desc:"Private-sector fund to restore headwater forests and reduce dust."}],recommendations:[{title:"Create a public-facing 'Haze Forecast for Tourists' system",body:"Develop an API-accessible haze index that feeds into Booking.com, Agoda, and TAT channels — enabling travellers to see predicted air quality at the time of booking."},{title:"Promote 'Clear Sky Season' (November–January) as the premium travel window",body:"Economic evidence shows that Chiang Mai's best air-quality months are its highest-revenue months. TAT and the Chiang Mai Tourism Council should jointly fund a 'Clear Sky Season' campaign."},{title:"Compensate burning-ban farmers through tourism revenue sharing",body:"Introduce a Tourism Levy Rebate scheme: a small additional tax on tourist accommodation (THB 30–50 per night) directed to a Haze Reduction Fund."},{title:"Expand green space programme to tourist corridors",body:"Prioritise canopy expansion along the Nimmanhaemin corridor, the Old City moat, and Warorot Market."},{title:"Develop alternative transport for poorly-connected attractions",body:"Pilot a shared electric-vehicle shuttle connecting Chiang Mai Airport to Doi Inthanon and the Samoeng Loop."}],gap:"There is no current project linking forest-fire suppression success to international tourism marketing."},
@@ -200,11 +190,9 @@ var RECS={
   NMA:{region:"Northeast Thailand (Isaan)",context:["As an inland province, NMA's tourism is driven primarily by cultural and nature attractions (Khao Yai National Park, ancient Khmer temples).","PM2.5 from agricultural burning is the primary climate variable affecting visitor arrivals.","Temperature extremes in the dry season (April–May) also suppress outdoor cultural tourism."],projects:[{name:"Forest Fire & PM2.5 Command Center",status:"Active (High Intensity, Jan–May 2026)",desc:"Satellite hotspot monitoring and 'Shiang Keb' strategy."},{name:"Fresh Sugarcane Cutting Campaign (Zero Burn Sugar Cane)",status:"Ongoing",desc:"Collaboration with sugar mills; harvesting machinery provision."},{name:"Black Smoke Inspection & Vehicle Emission Control",status:"Active",desc:"Roadside inspections on Mittraphap Road."},{name:"Air4Thai Real-time Monitoring",status:"Monitoring",desc:"Continuous PM2.5 tracking with health alerts to schools."},{name:"Zero-Burn Village & Sustainable Agriculture Project",status:"Expanding",desc:"Community networks at sub-district level."}],recommendations:[{title:"Translate PM2.5 reduction wins into tourism marketing assets",body:"Publish monthly 'Korat Air Quality Reports' targeting the Bangkok day-trip market. Position NMA as the 'clean alternative nature destination'."},{title:"Develop 'Zero-Burn Village' agritourism experiences",body:"Package as a 'Sustainable Farming Experience' for tourists."},{title:"Link Mittraphap Road emission controls to a Tourism Corridor Improvement Plan",body:"Extend the corridor improvement to include: rest-stop upgrades, EV charging stations, and wayfinding signage."},{title:"Khao Yai climate-resilience planning",body:"Commission a Khao Yai Climate-Tourism Impact Study to develop a 10-year adaptation plan."}],gap:"None of the current projects address extreme heat (40°C+ in April–May) at outdoor cultural sites such as Phimai Historical Park."},
   HKT:{region:"Andaman Coast",context:["Phuket's tourism economy — the largest in Thailand by revenue — is acutely sensitive to coral bleaching events.","SST anomalies during March–June have measurable negative effects on luxury accommodation occupancy.","The province faces rapidly escalating accommodation saturation in prime coastal zones."],projects:[{name:"Coral Reef Restoration (Koh Racha Yai) — Thai Union, SCG, DMCR",status:"Active (Year 2)",desc:"3D-printed SCG artificial reef structures."},{name:"Nakalay Bay Coral Restoration — Thavorn Hotels, DMCR, PSU",status:"Ongoing",desc:"Long-term coral rehabilitation at Nakalay Beach."},{name:"'Love The Sea' Artificial Reef Project — Earth Agenda Foundation, SCG",status:"Active",desc:"3D-printed base structures as breeding grounds for coral larvae."},{name:"DMCR Marine Life & Water Quality Monitoring",status:"Ongoing",desc:"Regular SST and biodiversity surveys; March 2026 sea turtle release at Nai Yang Beach."}],recommendations:[{title:"Establish a Phuket Marine Conservation Tourism Experience",body:"Combine three projects under a 'Phuket Marine Legacy' umbrella brand offering guided restoration snorkel tours and coral adoption certificates."},{title:"Make DMCR SST monitoring data available to dive operators in real time",body:"Create a simple API or weekly bulletin service with 7-day SST forecasts and reef health ratings."},{title:"Extend SCG 3D reef technology to Surin and Similan Islands",body:"Advocate for a multi-province 'Andaman Reef Corridor' project."},{title:"Address accommodation quality saturation in Patong and Kata",body:"Incentivise the upgrade of aging mid-range hotels to eco-certified luxury properties."},{title:"Develop a sea turtle and marine megafauna tourism circuit",body:"Develop a Marine Wildlife Calendar with organised ranger-led visitor experiences."}],gap:"Phuket has no comprehensive single-island visitor cap or reef entry permit system despite having the highest marine tourism pressure in Thailand."}
 };
-
 var currentProv=null;
 var detTabMode=0;
 var trTabMode={CNX:0,SNI:0,RYG:0};
-
 function switchTab(n){
   document.querySelectorAll('.main-tab').forEach(function(t,i){t.classList.remove('active');if(i===n)t.classList.add('active')});
   document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});
@@ -212,31 +200,26 @@ function switchTab(n){
   else if(n===1){document.getElementById('tab1').classList.add('active');renderDetChips()}
   else{document.getElementById('tab2').classList.add('active');renderTRTab()}
 }
-
-function fp(p){if(p<0.001)return '<0.001';var s=(p).toFixed(4);if(s.length>6)s=s.slice(0,6);return s}
-
+function fp(p){if(p<0.001)return '< 0.001';if(p<0.0001)return '< 0.0001';var s=(p).toFixed(4);if(s.length>6)s=s.slice(0,6);return s}
 function sig(p){if(p<0.001)return '<span class="sig-r">***</span>';if(p<0.01)return '<span class="sig-r">**</span>';if(p<0.05)return '<span class="sig-o">*</span>';return ''}
-
 function buildEq(prov,m){
-  var yShort=prov+'_'+m.y_var;
-  var lhs='',parts=[];
-  var isLogLog=m.type.includes('Log-Log');
-  var isSemiLogY=m.type.includes('Semi-Log')&&m.type.includes('lnY');
-  var isQuad=m.type.includes('Quadratic');
-  var isCubic=m.type.includes('Cubic');
-  if(isLogLog||isSemiLogY){lhs='ln('+yShort+')'}else{lhs=yShort}
-  parts.push(m.coefs[0].toFixed(4));
-  for(var i=1;i<m.var_names.length;i++){
-    var vn=m.var_names[i];
-    var c=m.coefs[i];
-    var sign=c>=0?' + ':' - ';
-    var absC=Math.abs(c);
-    var cStr=absC<0.01?absC.toExponential(3):absC.toFixed(4);
-    if(isLogLog){parts.push(sign+cStr+' × ln('+vn+')')}
-    else{parts.push(sign+cStr+' × '+vn)}
+  var lhs=prov+'_'+m.y_var;
+  var vNames=m.var_names.slice(1);
+  var subs=['₀','₁','₂','₃','₄','₅','₆','₇','₈','₉'];
+  if(m.type==='Log-Log'){
+    var eq='ln('+lhs+') = β₀';
+    vNames.forEach(function(v,i){eq+=' + β'+subs[i+1]+'·ln('+v+')'});
+    return eq;
+  }else if(m.type==='Semi-Log(lnY~X)'){
+    var eq='ln('+lhs+') = β₀';
+    vNames.forEach(function(v,i){eq+=' + β'+subs[i+1]+'·'+v});
+    return eq;
+  }else{
+    var eq=lhs+' = β₀';
+    vNames.forEach(function(v,i){eq+=' + β'+subs[i+1]+'·'+v});
+    return eq;
   }
-  return lhs+' = '+parts.join('')}
-
+}
 function genAnalysis(prov,m){
   var bullets=[];
   var yName=Y_FULL[m.y_var];
@@ -268,7 +251,6 @@ function genAnalysis(prov,m){
   }
   return bullets;
 }
-
 function renderModelBlock(containerId,prov,models,activeIdx,onTabClick,noTabs){
   var cont=document.getElementById(containerId);if(!cont)return;
   var m=models[activeIdx];
@@ -331,7 +313,6 @@ function renderModelBlock(containerId,prov,models,activeIdx,onTabClick,noTabs){
     new Chart(document.getElementById('residualChart'+containerId),{type:'bar',data:{labels:residLabels,datasets:[{label:'Residuals',data:residuals,backgroundColor:barColors,borderColor:barBorders,borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'Observation'},grid:{display:false}},y:{title:{display:true,text:'Residual'}}}}});
   },100);
 }
-
 function renderDetChips(){
   var html='';
   rankedProvs.forEach(function(p){
@@ -340,7 +321,6 @@ function renderDetChips(){
   document.getElementById('detChips').innerHTML=html;
   if(rankedProvs.length>0 && !currentProv){selectProv(rankedProvs[0])}
 }
-
 function renderOverviewTab(containerId,prov){
   var r=RECS[prov];
   if(!r){document.getElementById(containerId).innerHTML='<div class="card"><p style="color:#94a3b8">No recommendations data available.</p></div>';return}
@@ -356,7 +336,6 @@ function renderOverviewTab(containerId,prov){
   html+='<div class="card" style="background:#fee2e2;border-left:4px solid #dc2626"><div class="card-title" style="color:#991b1b">Critical Gap</div><p style="font-size:12px;color:#7c2d2d;line-height:1.6">'+r.gap+'</p></div>';
   document.getElementById(containerId).innerHTML=html;
 }
-
 function renderDetContent(p){
   var models=MODELS[p];
   var html='<div class="card"><div class="card-title">'+PROV_FULL[p]+' ('+p+')</div></div>';
@@ -378,7 +357,6 @@ function renderDetContent(p){
   detTabMode=0;
   renderOverviewTab('detContentArea',p);
 }
-
 function selectProv(p){
   currentProv=p;
   renderDetChips();
@@ -386,7 +364,6 @@ function selectProv(p){
   document.querySelectorAll('#detChips .chip').forEach(function(c){c.classList.remove('active')});
   event.target.classList.add('active')
 }
-
 function detTabClick(prov,idx){
   if(idx==='ov'){detTabMode=0}else{detTabMode=parseInt(idx)+1}
   document.querySelectorAll('.mtab').forEach(function(t){t.classList.remove('active')});
@@ -398,7 +375,6 @@ function detTabClick(prov,idx){
     renderModelBlock('detContentArea',prov,MODELS[prov],mIdx,function(idx){detTabClick(prov,idx)},true)
   }
 }
-
 function renderTRTab(){
   var html='';
   ['CNX','SNI','RYG'].forEach(function(prov){
@@ -412,11 +388,9 @@ function renderTRTab(){
     }
   })
 }
-
 function trTabClick(prov,idx){
   renderModelBlock('trBlock'+prov,prov,TR_MODELS[prov],idx,function(i){trTabClick(prov,i)},false)
 }
-
 function renderOverview(){
   var topProvs=rankedProvs.slice(0,9);
   var provRanked=topProvs.map(function(p,i){return '<div class="ranking-item"><span><span class="ranking-item-num">'+(i+1)+'.</span><span class="ranking-item-name" onclick="selectProvFromOverview(\''+p+'\')" style="cursor:pointer;color:#2563eb;text-decoration:underline;font-weight:600">'+PROV_FULL[p]+'</span></span></div>'}).join('');
@@ -429,9 +403,7 @@ function renderOverview(){
   document.getElementById('rankingBoxes').innerHTML=html;
   renderMap();
 }
-
 function selectProvFromOverview(p){switchTab(1);setTimeout(function(){selectProv(p)},100)}
-
 function renderMap(){
   var provCoords={BKK:{x:240,y:380,r:28},HKT:{x:165,y:680,r:26},KBV:{x:185,y:600,r:28},CNX:{x:185,y:120,r:32},CRI:{x:230,y:80,r:22},CBI:{x:310,y:310,r:22},SNI:{x:175,y:530,r:26},PKN:{x:210,y:460,r:32},RYG:{x:310,y:400,r:28},NMA:{x:330,y:260,r:26},UBP:{x:400,y:200,r:22},SKA:{x:240,y:740,r:28}};
   var colors={};
@@ -465,9 +437,7 @@ function renderMap(){
   legend+='</div>';
   document.getElementById('mapContainer').innerHTML=svg+legend;
 }
-
 renderOverview();
 </script>
-
 </body>
 </html>
