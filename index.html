@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navigating Climate Change Impacts on Thailand’s Tourism</title>
+    <title>Navigating Climate Change Impacts on Thailand's Tourism</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -73,7 +73,7 @@ table{width:100%;border-collapse:collapse;font-size:12px}
 <body>
 <div class="header">
     <div>
-        <h1>🌏 Navigating Climate Change Impacts on Thailand’s Tourism</h1>
+        <h1>🌏 Navigating Climate Change Impacts on Thailand's Tourism</h1>
         <p>Regression Analysis Dashboard — 12 Provinces | R² ≥ 0.6 | p &lt; 0.05</p>
     </div>
 </div>
@@ -269,7 +269,6 @@ function renderModelBlock(containerId,prov,models,activeIdx,onTabClick,noTabs){
   var question='Does '+xNames+' affect '+PROV_FULL[prov]+"'s "+Y_FULL[m.y_var]+'?';
   html+='<div class="q-box"><p>Question: '+question+'</p></div>';
   html+='<div class="eq-box"><div class="eq-label">Equation ('+m.type+'):</div><div class="eq-text">'+buildEq(prov,m)+'</div></div>';
-  /* Row 1: Model Details (left) + Coefficient Table (right) */
   html+='<div class="det-cols" style="align-items:start"><div class="det-left">';
   html+='<div style="font-weight:700;font-size:14px;color:#1e3a5f;margin-bottom:8px">Model Details</div>';
   html+='<table class="dt"><tbody>';
@@ -291,21 +290,17 @@ function renderModelBlock(containerId,prov,models,activeIdx,onTabClick,noTabs){
   html+='</tbody></table>';
   html+='<div class="sig-note">*** p&lt;0.001, ** p&lt;0.01, * p&lt;0.05</div>';
   html+='</div></div>';
-  /* Row 2: Actual vs Predicted (left) + Residual Plot (right) */
   html+='<div class="det-cols" style="margin-top:18px"><div class="det-left"><div class="card" style="margin-bottom:0"><div style="font-weight:700;font-size:14px;color:#1e3a5f;margin-bottom:8px">Actual vs Predicted</div><div class="chart-wrap"><canvas id="scatterChart'+containerId+'"></canvas></div></div></div>';
   html+='<div class="det-right"><div class="card" style="margin-bottom:0"><div style="font-weight:700;font-size:14px;color:#1e3a5f;margin-bottom:8px">Residual Plot</div><div class="chart-wrap"><canvas id="residualChart'+containerId+'"></canvas></div></div></div></div>';
-  /* Analysis */
   html+='<div class="analysis" style="margin-top:18px"><h4>Analysis</h4><ul>';
   genAnalysis(prov,m).forEach(function(b){html+='<li>'+b+'</li>'});
   html+='</ul></div>';
   cont.innerHTML=html;
   setTimeout(function(){
-    /* Scatter chart with perfect fit line */
     var scatterData=m.scatter.map(function(d){return{x:d.predicted,y:d.actual}});
     var sorted=scatterData.slice().sort(function(a,b){return a.x-b.x});
     var lineData=[sorted[0],sorted[sorted.length-1]];
     new Chart(document.getElementById('scatterChart'+containerId),{type:'scatter',data:{datasets:[{label:'Actual vs Predicted',data:scatterData,backgroundColor:'#2563eb',borderColor:'#1e3a5f',borderWidth:1,radius:4,pointHoverRadius:6},{type:'line',label:'Perfect Fit Line',data:lineData,borderColor:'#dc2626',borderWidth:2,borderDash:[6,4],pointRadius:0,pointHoverRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom'}},scales:{x:{title:{display:true,text:'Predicted'}},y:{title:{display:true,text:'Actual'}}}}});
-    /* Residual bar chart: green positive, red negative */
     var residuals=m.scatter.map(function(d){return d.actual-d.predicted});
     var residLabels=m.scatter.map(function(d,i){return ''+(i+1)});
     var barColors=residuals.map(function(r){return r>=0?'rgba(34,197,94,0.7)':'rgba(239,68,68,0.7)'});
@@ -315,8 +310,12 @@ function renderModelBlock(containerId,prov,models,activeIdx,onTabClick,noTabs){
 }
 function renderDetChips(){
   var html='';
-  rankedProvs.forEach(function(p){
-    html+='<span class="chip red" onclick="selectProv(\''+p+'\')">'+p+' — '+PROV_FULL[p]+'</span>'
+  rankedProvs.forEach(function(p,i){
+    var colorClass;
+    if(i<3){colorClass='red'}
+    else if(i<6){colorClass='orange'}
+    else{colorClass='yellow'}
+    html+='<span class="chip '+colorClass+'" onclick="selectProv(\''+p+'\')">'+p+' — '+PROV_FULL[p]+'</span>'
   });
   document.getElementById('detChips').innerHTML=html;
   if(rankedProvs.length>0 && !currentProv){selectProv(rankedProvs[0])}
