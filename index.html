@@ -23,7 +23,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f4f8;color:#1e293b}
 .chip{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:2px solid transparent;transition:.15s}
 .chip:hover{transform:translateY(-1px)}.chip.active{border-color:#1e3a5f}
 .chip.red{background:#fee2e2;color:#dc2626}.chip.orange{background:#ffedd5;color:#ea580c}
-.chip.yellow{background:#fef9c3;color:#a16207}.chip.gray{background:#f1f5f9;color:#94a3b8;cursor:default}
+.chip.yellow{background:#fef9c3;color:#eab308}.chip.gray{background:#f1f5f9;color:#94a3b8;cursor:default}
 .no-prov{text-align:center;padding:60px;color:#94a3b8;font-size:15px}
 .mtab-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .mtab{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #e2e8f0;background:#fff;transition:.2s;color:#4b5563}
@@ -45,7 +45,7 @@ table{width:100%;border-collapse:collapse;font-size:12px}
 .ct tbody td{padding:6px 10px;border:1px solid #e5e7eb;text-align:right}
 .ct tbody td:first-child{text-align:left;font-weight:600}
 .ct tbody tr:nth-child(even) td{background:#f8fafc}
-.sig-r{color:#dc2626;font-weight:800}.sig-o{color:#ea580c;font-weight:800}.sig-y{color:#ca8a04;font-weight:700}
+.sig-r{color:#dc2626;font-weight:800}.sig-o{color:#ea580c;font-weight:800}.sig-y{color:#eab308;font-weight:700}
 .sig-note{font-size:10px;color:#94a3b8;font-style:italic;margin-top:6px}
 .det-cols{display:flex;flex-wrap:wrap;gap:16px}
 .det-left{flex:1;min-width:290px}.det-right{flex:1;min-width:320px}
@@ -118,7 +118,7 @@ var PROV_COUNTS={BKK:3,HKT:1,KBV:3,CNX:3,CRI:0,CBI:0,SNI:3,PKN:3,RYG:3,NMA:2,UBP
 var X_FREQ={"X5(SeaTemp)":16,"X4(Shoreline)":15,"X3(PM)":10,"X2(Rain)":6,"X1(Temp)":4};
 var Y_FREQ={ForLOS:5,ThaiTR:4,LOS:3,ThaiTA:3,ForEXP:3,ThaiEXP:3,ThaiLOS:1,EXP:1};
 var ALL_PROVS=["BKK","HKT","KBV","CNX","CRI","CBI","SNI","PKN","RYG","NMA","UBP","SKA"];
-var rankedProvs=ALL_PROVS.filter(function(p){return PROV_COUNTS[p]>0}).sort(function(a,b){return PROV_COUNTS[b]-PROV_COUNTS[a]});
+var rankedProvs=["PKN","CNX","RYG","KBV","SKA","BKK","SNI","NMA","HKT"];
 var noModel=ALL_PROVS.filter(function(p){return PROV_COUNTS[p]===0});
 function mks(n,base,amp){var d=[];for(var i=0;i<n;i++){var v=base+Math.sin(i*0.5)*amp;d.push({idx:i+1,actual:+(v+(Math.random()-0.5)*amp*0.4).toFixed(3),predicted:+v.toFixed(3)})}return d}
 var MODELS={
@@ -398,7 +398,7 @@ function renderOverview(){
   var topProvs=rankedProvs.slice(0,9);
   var provRanked=topProvs.map(function(p,i){
     var tierColor;
-    if(i<3){tierColor='#dc2626'}else if(i<6){tierColor='#ea580c'}else{tierColor='#ca8a04'}
+    if(i<3){tierColor='#dc2626'}else if(i<6){tierColor='#ea580c'}else{tierColor='#eab308'}
     var cnt=PROV_COUNTS[p];
     var cntLabel=cnt+' model'+(cnt!==1?'s':'');
     return '<div class="ranking-item"><span class="ranking-item-num" style="color:'+tierColor+'">'+(i+1)+'.</span><span class="ranking-item-name" onclick="selectProvFromOverview(\''+p+'\')" style="cursor:pointer;color:'+tierColor+';font-weight:600">'+PROV_FULL[p]+'</span><span style="font-size:12px;font-weight:600;color:'+tierColor+';white-space:nowrap;margin-left:8px">'+cntLabel+'</span></div>'
@@ -429,7 +429,7 @@ function renderMap(){
     if(idx===-1){colors[p]='#cbd5e1'}
     else if(idx<3){colors[p]='#dc2626'}
     else if(idx<6){colors[p]='#ea580c'}
-    else{colors[p]='#ca8a04'}
+    else{colors[p]='#eab308'}
   });
   var svg='<svg viewBox="0 0 500 820" style="max-width:420px;height:auto;margin:0 auto;display:block" xmlns="http://www.w3.org/2000/svg">';
   svg+='<defs><filter id="ds" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>';
@@ -448,7 +448,7 @@ function renderMap(){
   var legend='<div style="display:flex;justify-content:center;gap:24px;margin-top:16px;font-size:13px;color:#475569;flex-wrap:wrap">';
   legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#dc2626;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>Top 3</span>';
   legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#ea580c;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>4th–6th</span>';
-  legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#ca8a04;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>7th–9th</span>';
+  legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#eab308;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>7th–9th</span>';
   legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#cbd5e1;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>No Model</span>';
   legend+='</div>';
   document.getElementById('mapContainer').innerHTML=svg+legend;
