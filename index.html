@@ -114,9 +114,9 @@ table{width:100%;border-collapse:collapse;font-size:12px}
 var PROV_FULL={BKK:"Bangkok",HKT:"Phuket",KBV:"Krabi",CNX:"Chiang Mai",CRI:"Chiang Rai",CBI:"Chonburi",SNI:"Surat Thani",PKN:"Prachuap Khiri Khan",RYG:"Rayong",NMA:"Nakhon Ratchasima",UBP:"Ubon Ratchathani",SKA:"Songkhla"};
 var Y_FULL={Temp:"Average Temperature (Celsius)",Rain:"Monthly Precipitation (mm)",PM:"Avg. PM 2.5 Level (µg/m³)",TA:"Tourist Arrivals",ThaiTA:"Tourist Arrivals (Thai)",ForTA:"Tourist Arrivals (Foreigners)",LOS:"Length of Stay",ThaiLOS:"Length of Stay (Thai)",ForLOS:"Length of Stay (Foreigners)",EXP:"Average Expenditure (Baht/Person/Day)",ThaiEXP:"Average Expenditure (Baht/Person/Day) (Thai)",ForEXP:"Average Expenditure (Baht/Person/Day) (Foreigners)",TR:"Tourism Revenue",ThaiTR:"Tourism Revenue (Thai)",ForTR:"Tourism Revenue (Foreigners)"};
 var X_FULL={"X1(Temp)":"Average Temperature (°C)","X2(Rain)":"Monthly Precipitation (mm)","X3(PM)":"Avg. PM 2.5 Level (µg/m³)","X4(Shoreline)":"Shoreline Change","X5(SeaTemp)":"Sea Surface Temperature (°C)"};
-var PROV_COUNTS={BKK:3,HKT:1,KBV:8,CNX:20,CRI:0,CBI:0,SNI:3,PKN:27,RYG:14,NMA:2,UBP:0,SKA:8};
-var X_FREQ={"X5(SeaTemp)":54,"X4(Shoreline)":53,"X1(Temp)":38,"X3(PM)":33,"X2(Rain)":25};
-var Y_FREQ={LOS:15,ForLOS:13,ThaiTA:10,TA:9,ForEXP:8,ThaiEXP:8,ThaiLOS:7,ThaiTR:6,TR:4,EXP:4,ForTA:1,ForTR:1};
+var PROV_COUNTS={BKK:3,HKT:1,KBV:3,CNX:3,CRI:0,CBI:0,SNI:3,PKN:3,RYG:3,NMA:2,UBP:0,SKA:3};
+var X_FREQ={"X5(SeaTemp)":16,"X4(Shoreline)":15,"X3(PM)":10,"X2(Rain)":6,"X1(Temp)":4};
+var Y_FREQ={ForLOS:5,ThaiTR:4,LOS:3,ThaiTA:3,ForEXP:3,ThaiEXP:3,ThaiLOS:1,EXP:1};
 var ALL_PROVS=["BKK","HKT","KBV","CNX","CRI","CBI","SNI","PKN","RYG","NMA","UBP","SKA"];
 var rankedProvs=ALL_PROVS.filter(function(p){return PROV_COUNTS[p]>0}).sort(function(a,b){return PROV_COUNTS[b]-PROV_COUNTS[a]});
 var noModel=ALL_PROVS.filter(function(p){return PROV_COUNTS[p]===0});
@@ -337,12 +337,15 @@ function renderOverviewTab(containerId,prov){
 }
 function renderDetContent(p){
   var models=MODELS[p];
-  var html='<div class="card"><div class="card-title">'+PROV_FULL[p]+' ('+p+')</div></div>';
+  var html='';
   if(!models || models.length===0){
+    html+='<div class="card"><div class="card-title">'+PROV_FULL[p]+' ('+p+')</div></div>';
     html+='<div class="no-prov">No regression models available for this province.</div>';
     document.getElementById('detContent').innerHTML=html;
     return
   }
+  html+='<div class="tr-prov-block">';
+  html+='<div class="tr-prov-title">'+PROV_FULL[p]+' ('+p+')</div>';
   html+='<div class="mtab-row">';
   html+='<div class="mtab ov-tab active" onclick="detTabClick(\''+p+'\',\'ov\')">Overview</div>';
   models.forEach(function(model,idx){
@@ -352,6 +355,7 @@ function renderDetContent(p){
   });
   html+='</div>';
   html+='<div id="detContentArea"></div>';
+  html+='</div>';
   document.getElementById('detContent').innerHTML=html;
   detTabMode=0;
   renderOverviewTab('detContentArea',p);
@@ -392,13 +396,26 @@ function trTabClick(prov,idx){
 }
 function renderOverview(){
   var topProvs=rankedProvs.slice(0,9);
-  var provRanked=topProvs.map(function(p,i){return '<div class="ranking-item"><span><span class="ranking-item-num">'+(i+1)+'.</span><span class="ranking-item-name" onclick="selectProvFromOverview(\''+p+'\')" style="cursor:pointer;color:#2563eb;text-decoration:underline;font-weight:600">'+PROV_FULL[p]+'</span></span></div>'}).join('');
-  var xranked=Object.keys(X_FREQ).sort(function(a,b){return X_FREQ[b]-X_FREQ[a]}).slice(0,5).map(function(x,i){return '<div class="ranking-item"><span><span class="ranking-item-num">'+(i+1)+'.</span><span class="ranking-item-name">'+X_FULL[x]+'</span></span></div>'}).join('');
-  var yranked=Object.keys(Y_FREQ).sort(function(a,b){return Y_FREQ[b]-Y_FREQ[a]}).slice(0,8).map(function(y,i){return '<div class="ranking-item"><span><span class="ranking-item-num">'+(i+1)+'.</span><span class="ranking-item-name">'+Y_FULL[y]+'</span></span></div>'}).join('');
+  var provRanked=topProvs.map(function(p,i){
+    var tierColor;
+    if(i<3){tierColor='#dc2626'}else if(i<6){tierColor='#ea580c'}else{tierColor='#ca8a04'}
+    var cnt=PROV_COUNTS[p];
+    var cntLabel=cnt+' model'+(cnt!==1?'s':'');
+    return '<div class="ranking-item"><span class="ranking-item-num" style="color:'+tierColor+'">'+(i+1)+'.</span><span class="ranking-item-name" onclick="selectProvFromOverview(\''+p+'\')" style="cursor:pointer;color:'+tierColor+';font-weight:600">'+PROV_FULL[p]+'</span><span style="font-size:12px;font-weight:600;color:'+tierColor+';white-space:nowrap;margin-left:8px">'+cntLabel+'</span></div>'
+  }).join('');
+  var xranked=Object.keys(X_FREQ).sort(function(a,b){return X_FREQ[b]-X_FREQ[a]}).slice(0,5).map(function(x,i){
+    var cnt=X_FREQ[x];
+    return '<div class="ranking-item"><span class="ranking-item-num">'+(i+1)+'.</span><span class="ranking-item-name">'+X_FULL[x]+'</span><span style="font-size:12px;font-weight:600;color:#059669;white-space:nowrap;margin-left:8px">'+cnt+' appearances</span></div>'
+  }).join('');
+  var yranked=Object.keys(Y_FREQ).sort(function(a,b){return Y_FREQ[b]-Y_FREQ[a]}).slice(0,8).map(function(y,i){
+    var cnt=Y_FREQ[y];
+    var cntLabel=cnt+' model'+(cnt!==1?'s':'');
+    return '<div class="ranking-item"><span class="ranking-item-num">'+(i+1)+'.</span><span class="ranking-item-name">'+Y_FULL[y]+'</span><span style="font-size:12px;font-weight:600;color:#dc2626;white-space:nowrap;margin-left:8px">'+cntLabel+'</span></div>'
+  }).join('');
   var html='';
-  html+='<div class="ranking-box"><div class="ranking-box-title">🏔️ Top Provinces Most Affected by Climate Variables</div><div class="ranking-list">'+provRanked+'</div></div>';
-  html+='<div class="ranking-box"><div class="ranking-box-title">🌡️ Climate Variables Impact Ranking (High → Low)</div><div class="ranking-list">'+xranked+'</div></div>';
-  html+='<div class="ranking-box"><div class="ranking-box-title">📈 Top Y Variables Most Affected</div><div class="ranking-list">'+yranked+'</div></div>';
+  html+='<div class="ranking-box"><div class="ranking-box-title">Top Provinces Most Affected by Climate Variables</div><div class="ranking-list">'+provRanked+'</div></div>';
+  html+='<div class="ranking-box"><div class="ranking-box-title">Climate Variables Impact Ranking (High → Low)</div><div class="ranking-list">'+xranked+'</div></div>';
+  html+='<div class="ranking-box"><div class="ranking-box-title">Top Y Variables Most Affected</div><div class="ranking-list">'+yranked+'</div></div>';
   document.getElementById('rankingBoxes').innerHTML=html;
   renderMap();
 }
