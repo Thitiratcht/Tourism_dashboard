@@ -114,11 +114,11 @@ table{width:100%;border-collapse:collapse;font-size:12px}
 var PROV_FULL={BKK:"Bangkok",HKT:"Phuket",KBV:"Krabi",CNX:"Chiang Mai",CRI:"Chiang Rai",CBI:"Chonburi",SNI:"Surat Thani",PKN:"Prachuap Khiri Khan",RYG:"Rayong",NMA:"Nakhon Ratchasima",UBP:"Ubon Ratchathani",SKA:"Songkhla"};
 var Y_FULL={Temp:"Average Temperature (Celsius)",Rain:"Monthly Precipitation (mm)",PM:"Avg. PM 2.5 Level (µg/m³)",TA:"Tourist Arrivals",ThaiTA:"Tourist Arrivals (Thai)",ForTA:"Tourist Arrivals (Foreigners)",LOS:"Length of Stay",ThaiLOS:"Length of Stay (Thai)",ForLOS:"Length of Stay (Foreigners)",EXP:"Average Expenditure (Baht/Person/Day)",ThaiEXP:"Average Expenditure (Baht/Person/Day) (Thai)",ForEXP:"Average Expenditure (Baht/Person/Day) (Foreigners)",TR:"Tourism Revenue",ThaiTR:"Tourism Revenue (Thai)",ForTR:"Tourism Revenue (Foreigners)"};
 var X_FULL={"X1(Temp)":"Average Temperature (°C)","X2(Rain)":"Monthly Precipitation (mm)","X3(PM)":"Avg. PM 2.5 Level (µg/m³)","X4(Shoreline)":"Shoreline Change","X5(SeaTemp)":"Sea Surface Temperature (°C)"};
-var PROV_COUNTS={BKK:3,HKT:1,KBV:3,CNX:3,CRI:0,CBI:0,SNI:3,PKN:3,RYG:3,NMA:2,UBP:0,SKA:3};
-var X_FREQ={"X5(SeaTemp)":16,"X4(Shoreline)":15,"X3(PM)":10,"X2(Rain)":6,"X1(Temp)":4};
-var Y_FREQ={ForLOS:5,ThaiTR:4,LOS:3,ThaiTA:3,ForEXP:3,ThaiEXP:3,ThaiLOS:1,EXP:1};
+var PROV_COUNTS={BKK:3,HKT:1,KBV:3,CNX:3,CRI:0,CBI:0,SNI:0,PKN:3,RYG:3,NMA:0,UBP:0,SKA:0};
+var X_FREQ={"X5(SeaTemp)":10,"X4(Shoreline)":9,"X3(PM)":6,"X2(Rain)":5,"X1(Temp)":4};
+var Y_FREQ={ForLOS:5,ForEXP:3,LOS:2,ThaiTA:2,ThaiTR:1,ThaiEXP:1,ThaiLOS:1};
 var ALL_PROVS=["BKK","HKT","KBV","CNX","CRI","CBI","SNI","PKN","RYG","NMA","UBP","SKA"];
-var rankedProvs=["PKN","CNX","RYG","KBV","SKA","BKK","SNI","NMA","HKT"];
+var rankedProvs=["PKN","CNX","RYG","KBV","BKK","HKT"];
 var noModel=ALL_PROVS.filter(function(p){return PROV_COUNTS[p]===0});
 function mks(n,base,amp){var d=[];for(var i=0;i<n;i++){var v=base+Math.sin(i*0.5)*amp;d.push({idx:i+1,actual:+(v+(Math.random()-0.5)*amp*0.4).toFixed(3),predicted:+v.toFixed(3)})}return d}
 var MODELS={
@@ -142,26 +142,15 @@ var MODELS={
     {y_var:"ForLOS",type:"Log-Log",x_vars:["X1(Temp)","X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Monthly",r2:0.7222,adj_r2:0.7046,f_stat:40.9518,f_p:0.0,n:68,error_df:63,dw:0.5194,var_names:["Constant","X1(Temp)","X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],coefs:[7.656164,0.596897,0.01277,-0.043595,-2.530434],se:[0.697,0.2478,0.00428,0.0077,0.2425],t_stats:[10.9798,2.4083,2.9865,-5.6641,-10.434],p_vals:[0.0,0.018967,0.004016,0.0,0.0],scatter:mks(24,1.1,0.3)},
     {y_var:"ForLOS",type:"Log-Log",x_vars:["X3(PM)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.7145,adj_r2:0.6717,f_stat:16.6849,f_p:1.145e-5,n:24,error_df:20,dw:2.046,var_names:["Constant","X3(PM)","X4(Shoreline)","X5(SeaTemp)"],coefs:[9.724373,-0.077374,-0.063855,-2.471111],se:[1.368,0.03267,0.01295,0.3889],t_stats:[7.1101,-2.3685,-4.9301,-6.3519],p_vals:[0.000001,0.028042,0.000081,0.000003],scatter:mks(24,1.3,0.25)}
   ],
-  SKA:[
-    {y_var:"ThaiEXP",type:"Log-Log",x_vars:["X3(PM)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.7538,adj_r2:0.7169,f_stat:20.4115,f_p:2.67e-6,n:24,error_df:20,dw:1.25,var_names:["Constant","X3(PM)","X4(Shoreline)","X5(SeaTemp)"],coefs:[1.619704,0.175066,0.093002,1.47463],se:[1.095,0.0437,0.01235,0.3133],t_stats:[1.4787,4.0055,7.5306,4.7055],p_vals:[0.154809,0.000694,0.0,0.000136],scatter:mks(24,6.5,0.5)},
-    {y_var:"ThaiTA",type:"Log-Log",x_vars:["X3(PM)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.6558,adj_r2:0.6043,f_stat:12.7,f_p:7.8e-5,n:24,error_df:20,dw:1.42,var_names:["Constant","X3(PM)","X4(Shoreline)","X5(SeaTemp)"],coefs:[4.2,0.12,0.065,1.12],se:[1.5,0.04,0.011,0.28],t_stats:[2.8,3.0,5.9,4.0],p_vals:[0.011,0.007,0.0,0.001],scatter:mks(24,10.5,0.4)},
-    {y_var:"LOS",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.6321,adj_r2:0.5971,f_stat:18.05,f_p:2.8e-5,n:24,error_df:21,dw:1.38,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[8.5,-0.05,-2.1],se:[1.8,0.015,0.38],t_stats:[4.72,-3.33,-5.53],p_vals:[0.0001,0.003,0.00002],scatter:mks(24,2.0,0.3)}
-  ],
+  SKA:[],
   KBV:[
     {y_var:"ThaiEXP",type:"Log-Log",x_vars:["X2(Rain)","X3(PM)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.6756,adj_r2:0.6073,f_stat:9.89,f_p:0.00019,n:24,error_df:19,dw:1.55,var_names:["Constant","X2(Rain)","X3(PM)","X4(Shoreline)","X5(SeaTemp)"],coefs:[3.1,0.08,0.15,0.07,1.2],se:[1.2,0.03,0.05,0.02,0.35],t_stats:[2.58,2.67,3.0,3.5,3.43],p_vals:[0.018,0.015,0.007,0.002,0.003],scatter:mks(24,6.8,0.4)},
     {y_var:"ForEXP",type:"Log-Log",x_vars:["X2(Rain)","X3(PM)","X4(Shoreline)"],data_freq:"Quarterly",r2:0.6512,adj_r2:0.5989,f_stat:12.46,f_p:9.5e-5,n:24,error_df:20,dw:1.48,var_names:["Constant","X2(Rain)","X3(PM)","X4(Shoreline)"],coefs:[5.8,0.06,0.11,0.055],se:[1.5,0.025,0.04,0.018],t_stats:[3.87,2.4,2.75,3.06],p_vals:[0.001,0.026,0.012,0.006],scatter:mks(24,7.5,0.35)},
     {y_var:"EXP",type:"Log-Log",x_vars:["X2(Rain)","X3(PM)","X4(Shoreline)"],data_freq:"Quarterly",r2:0.6401,adj_r2:0.5862,f_stat:11.86,f_p:0.00012,n:24,error_df:20,dw:1.52,var_names:["Constant","X2(Rain)","X3(PM)","X4(Shoreline)"],coefs:[5.5,0.055,0.1,0.048],se:[1.4,0.023,0.038,0.016],t_stats:[3.93,2.39,2.63,3.0],p_vals:[0.001,0.027,0.016,0.007],scatter:mks(24,7.2,0.35)}
   ],
   HKT:[{y_var:"ThaiTA",type:"Cubic",x_vars:["X4(Shoreline)"],data_freq:"Quarterly",r2:0.6735,adj_r2:0.6245,f_stat:13.76,f_p:5.3e-5,n:24,error_df:20,dw:1.62,var_names:["Constant","X4(Shoreline)","X4(Shoreline)²","X4(Shoreline)³"],coefs:[250000,-180000,42000,-3200],se:[65000,48000,11600,880],t_stats:[3.85,-3.75,3.62,-3.64],p_vals:[0.001,0.0013,0.0017,0.0016],scatter:mks(24,12.5,0.6)}],
-  SNI:[
-    {y_var:"ThaiTR",type:"Semi-Log(lnY~X)",x_vars:["X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.6729,adj_r2:0.6239,f_stat:13.72,f_p:5.5e-5,n:24,error_df:20,dw:1.35,var_names:["Constant","X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],coefs:[28.5,-0.0003,0.045,-0.52],se:[5.2,0.00012,0.015,0.17],t_stats:[5.48,-2.5,3.0,-3.06],p_vals:[0.00003,0.021,0.007,0.006],scatter:mks(24,22.5,0.5)},
-    {y_var:"ThaiTR",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.6510,adj_r2:0.6178,f_stat:19.56,f_p:1.9e-5,n:24,error_df:21,dw:1.28,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[35.2,0.058,-7.8],se:[6.5,0.02,1.45],t_stats:[5.42,2.9,-5.38],p_vals:[0.00003,0.009,0.00003],scatter:mks(24,22.0,0.45)},
-    {y_var:"ThaiTR",type:"Semi-Log(lnY~X)",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.6150,adj_r2:0.5783,f_stat:16.78,f_p:4.5e-5,n:24,error_df:21,dw:1.22,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[32.1,0.42,-0.68],se:[6.8,0.14,0.21],t_stats:[4.72,3.0,-3.24],p_vals:[0.0001,0.007,0.004],scatter:mks(24,21.8,0.4)}
-  ],
-  NMA:[
-    {y_var:"ThaiEXP",type:"Quadratic",x_vars:["X3(PM)"],data_freq:"Quarterly",r2:0.6116,adj_r2:0.5746,f_stat:16.53,f_p:4.9e-5,n:24,error_df:21,dw:1.18,var_names:["Constant","X3(PM)","X3(PM)²"],coefs:[850,-15,0.18],se:[200,4.5,0.052],t_stats:[4.25,-3.33,3.46],p_vals:[0.0004,0.003,0.002],scatter:mks(24,580,30)},
-    {y_var:"EXP",type:"Quadratic",x_vars:["X3(PM)"],data_freq:"Quarterly",r2:0.6010,adj_r2:0.563,f_stat:15.83,f_p:6.2e-5,n:24,error_df:21,dw:1.15,var_names:["Constant","X3(PM)","X3(PM)²"],coefs:[780,-12,0.15],se:[190,3.8,0.044],t_stats:[4.11,-3.16,3.41],p_vals:[0.0005,0.005,0.003],scatter:mks(24,560,28)}
-  ],
+  SNI:[],
+  NMA:[],
   CRI:[],CBI:[],UBP:[]
 };
 var TR_MODELS={
@@ -170,11 +159,7 @@ var TR_MODELS={
     {y_var:"TR",type:"Quadratic",x_vars:["X1(Temp)"],data_freq:"Quarterly",r2:0.728,adj_r2:0.702,f_stat:28.1,f_p:5.0e-7,n:24,error_df:21,dw:2.05,var_names:["Constant","X1(Temp)","X1(Temp)²"],coefs:[55000000000,-3700000000,64000000],se:[9800000000,712000000,12900000],t_stats:[5.61,-5.20,4.96],p_vals:[0.00002,0.00005,0.00008],scatter:mks(24,7.0,0.7)},
     {y_var:"TR",type:"Log-Log",x_vars:["X1(Temp)","X3(PM)"],data_freq:"Quarterly",r2:0.688,adj_r2:0.658,f_stat:23.2,f_p:7.0e-7,n:24,error_df:21,dw:2.28,var_names:["Constant","X1(Temp)","X3(PM)"],coefs:[18.5,-1.52,0.12],se:[0.82,0.24,0.032],t_stats:[22.56,-6.33,3.75],p_vals:[0.0,0.000003,0.001],scatter:mks(24,7.2,0.6)}
   ],
-  SNI:[
-    {y_var:"ThaiTR",type:"Semi-Log(lnY~X)",x_vars:["X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.6729,adj_r2:0.6239,f_stat:13.72,f_p:5.5e-5,n:24,error_df:20,dw:1.35,var_names:["Constant","X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],coefs:[28.5,-0.0003,0.045,-0.52],se:[5.2,0.00012,0.015,0.17],t_stats:[5.48,-2.5,3.0,-3.06],p_vals:[0.00003,0.021,0.007,0.006],scatter:mks(24,22.5,0.5)},
-    {y_var:"ThaiTR",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.6510,adj_r2:0.6178,f_stat:19.56,f_p:1.9e-5,n:24,error_df:21,dw:1.28,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[35.2,0.058,-7.8],se:[6.5,0.02,1.45],t_stats:[5.42,2.9,-5.38],p_vals:[0.00003,0.009,0.00003],scatter:mks(24,22.0,0.45)},
-    {y_var:"ForTR",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.618,adj_r2:0.582,f_stat:17.01,f_p:3.0e-5,n:24,error_df:21,dw:1.32,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[30.1,0.048,-6.5],se:[5.8,0.018,1.2],t_stats:[5.19,2.67,-5.42],p_vals:[0.00004,0.015,0.00003],scatter:mks(24,21.0,0.4)}
-  ],
+  SNI:[],
   RYG:[
     {y_var:"ForTR",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.612,adj_r2:0.575,f_stat:16.6,f_p:4.5e-5,n:24,error_df:21,dw:1.45,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[28.8,0.042,-6.1],se:[5.5,0.016,1.1],t_stats:[5.24,2.63,-5.55],p_vals:[0.00004,0.016,0.00002],scatter:mks(24,20.5,0.4)}
   ]
@@ -192,7 +177,7 @@ var RECS={
 };
 var currentProv=null;
 var detTabMode=0;
-var trTabMode={CNX:0,SNI:0,RYG:0};
+var trTabMode={CNX:0,RYG:0};
 function switchTab(n){
   document.querySelectorAll('.main-tab').forEach(function(t,i){t.classList.remove('active');if(i===n)t.classList.add('active')});
   document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});
@@ -326,6 +311,74 @@ function renderOverviewTab(containerId,prov){
   var html='<div class="card"><div class="card-title">Econometric Context</div><div style="background:#dbeafe;border-radius:8px;padding:12px;border-left:4px solid #2563eb"><p style="font-size:12px;line-height:1.6;color:#1e3a5f">';
   r.context.forEach(function(c){html+='• '+c+'<br>'});
   html+='</p></div></div>';
+  /* Model Comparison Table for provinces with 3+ models */
+  var models=MODELS[prov];
+  if(models && models.length>=3){
+    html+='<div class="card"><div class="card-title">📊 Model Comparison</div>';
+    html+='<div style="overflow-x:auto"><table class="ct"><thead><tr><th style="text-align:left">Metric</th>';
+    models.forEach(function(m,idx){
+      html+='<th style="text-align:center">Model '+(idx+1)+'<br><span style="font-weight:400;font-size:10px">'+m.y_var+' ('+m.type+')</span></th>'
+    });
+    html+='</tr></thead><tbody>';
+    /* Y Variable */
+    html+='<tr><td style="font-weight:600">Y Variable</td>';
+    models.forEach(function(m){html+='<td style="text-align:center">'+(Y_FULL[m.y_var]||m.y_var)+'</td>'});
+    html+='</tr>';
+    /* X Variables */
+    html+='<tr><td style="font-weight:600">X Variables</td>';
+    models.forEach(function(m){
+      var xList=m.x_vars.map(function(x){return X_FULL[x]||x}).join(', ');
+      html+='<td style="text-align:center;font-size:11px">'+xList+'</td>'
+    });
+    html+='</tr>';
+    /* Model Type */
+    html+='<tr><td style="font-weight:600">Model Type</td>';
+    models.forEach(function(m){html+='<td style="text-align:center">'+m.type+'</td>'});
+    html+='</tr>';
+    /* R² */
+    html+='<tr><td style="font-weight:600">R²</td>';
+    models.forEach(function(m){
+      var best=models.reduce(function(max,mm){return mm.r2>max?mm.r2:max},0);
+      var style=m.r2===best?'text-align:center;color:#059669;font-weight:700':'text-align:center';
+      html+='<td style="'+style+'">'+m.r2.toFixed(4)+'</td>'
+    });
+    html+='</tr>';
+    /* Adjusted R² */
+    html+='<tr><td style="font-weight:600">Adjusted R²</td>';
+    models.forEach(function(m){
+      var best=models.reduce(function(max,mm){return mm.adj_r2>max?mm.adj_r2:max},0);
+      var style=m.adj_r2===best?'text-align:center;color:#059669;font-weight:700':'text-align:center';
+      html+='<td style="'+style+'">'+m.adj_r2.toFixed(4)+'</td>'
+    });
+    html+='</tr>';
+    /* F-Statistic */
+    html+='<tr><td style="font-weight:600">F-Statistic</td>';
+    models.forEach(function(m){html+='<td style="text-align:center">'+m.f_stat.toFixed(2)+'</td>'});
+    html+='</tr>';
+    /* P-Value (F) */
+    html+='<tr><td style="font-weight:600">P-Value (F)</td>';
+    models.forEach(function(m){html+='<td style="text-align:center">'+fp(m.f_p)+'</td>'});
+    html+='</tr>';
+    /* Durbin-Watson */
+    html+='<tr><td style="font-weight:600">Durbin-Watson</td>';
+    models.forEach(function(m){
+      var dw=m.dw;var dwColor='#1e293b';
+      if(dw>=1.5&&dw<=2.5){dwColor='#059669'}else{dwColor='#dc2626'}
+      html+='<td style="text-align:center;color:'+dwColor+';font-weight:600">'+(dw?dw.toFixed(4):'N/A')+'</td>'
+    });
+    html+='</tr>';
+    /* N */
+    html+='<tr><td style="font-weight:600">N (Observations)</td>';
+    models.forEach(function(m){html+='<td style="text-align:center">'+m.n+'</td>'});
+    html+='</tr>';
+    /* Data Frequency */
+    html+='<tr><td style="font-weight:600">Data Frequency</td>';
+    models.forEach(function(m){html+='<td style="text-align:center">'+(m.data_freq||'Quarterly')+'</td>'});
+    html+='</tr>';
+    html+='</tbody></table></div>';
+    html+='<p style="font-size:11px;color:#059669;margin-top:8px;font-style:italic">✓ Green values indicate best-performing model for that metric. Green DW = no autocorrelation concern (1.5–2.5).</p>';
+    html+='</div>';
+  }
   html+='<div class="card"><div class="card-title">Present/Ongoing Projects</div>';
   r.projects.forEach(function(proj){html+='<div style="margin-bottom:12px"><div style="font-weight:700;font-size:12px;color:#1e3a5f">'+proj.name+'</div><div style="font-size:11px;color:#64748b">Status: '+proj.status+'</div><div style="font-size:12px;color:#475569;margin-top:4px">'+proj.desc+'</div></div>'});
   html+='</div>';
@@ -380,11 +433,11 @@ function detTabClick(prov,idx){
 }
 function renderTRTab(){
   var html='';
-  ['CNX','SNI','RYG'].forEach(function(prov){
+  ['CNX','RYG'].forEach(function(prov){
     html+='<div class="tr-prov-block"><div class="tr-prov-title">'+PROV_FULL[prov]+' ('+prov+')</div><div id="trBlock'+prov+'"></div></div>'
   });
   document.getElementById('trContent').innerHTML=html;
-  ['CNX','SNI','RYG'].forEach(function(prov){
+  ['CNX','RYG'].forEach(function(prov){
     var models=TR_MODELS[prov];
     if(models && models.length>0){
       renderModelBlock('trBlock'+prov,prov,models,0,function(idx){trTabClick(prov,idx)},false)
@@ -448,7 +501,6 @@ function renderMap(){
   var legend='<div style="display:flex;justify-content:center;gap:24px;margin-top:16px;font-size:13px;color:#475569;flex-wrap:wrap">';
   legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#dc2626;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>Top 3</span>';
   legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#ea580c;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>4th–6th</span>';
-  legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#eab308;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>7th–9th</span>';
   legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#cbd5e1;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>No Model</span>';
   legend+='</div>';
   document.getElementById('mapContainer').innerHTML=svg+legend;
