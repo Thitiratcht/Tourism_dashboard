@@ -114,54 +114,59 @@ table{width:100%;border-collapse:collapse;font-size:12px}
 var PROV_FULL={BKK:"Bangkok",HKT:"Phuket",KBV:"Krabi",CNX:"Chiang Mai",CRI:"Chiang Rai",CBI:"Chonburi",SNI:"Surat Thani",PKN:"Prachuap Khiri Khan",RYG:"Rayong",NMA:"Nakhon Ratchasima",UBP:"Ubon Ratchathani",SKA:"Songkhla"};
 var Y_FULL={Temp:"Average Temperature (Celsius)",Rain:"Monthly Precipitation (mm)",PM:"Avg. PM 2.5 Level (µg/m³)",TA:"Tourist Arrivals",ThaiTA:"Tourist Arrivals (Thai)",ForTA:"Tourist Arrivals (Foreigners)",LOS:"Length of Stay",ThaiLOS:"Length of Stay (Thai)",ForLOS:"Length of Stay (Foreigners)",EXP:"Average Expenditure (Baht/Person/Day)",ThaiEXP:"Average Expenditure (Baht/Person/Day) (Thai)",ForEXP:"Average Expenditure (Baht/Person/Day) (Foreigners)",TR:"Tourism Revenue",ThaiTR:"Tourism Revenue (Thai)",ForTR:"Tourism Revenue (Foreigners)"};
 var X_FULL={"X1(Temp)":"Average Temperature (°C)","X2(Rain)":"Monthly Precipitation (mm)","X3(PM)":"Avg. PM 2.5 Level (µg/m³)","X4(Shoreline)":"Shoreline Change","X5(SeaTemp)":"Sea Surface Temperature (°C)"};
-var PROV_COUNTS={BKK:3,HKT:1,KBV:3,CNX:3,CRI:0,CBI:0,SNI:0,PKN:3,RYG:3,NMA:0,UBP:0,SKA:0};
-var X_FREQ={"X5(SeaTemp)":10,"X4(Shoreline)":9,"X3(PM)":6,"X2(Rain)":5,"X1(Temp)":4};
-var Y_FREQ={ForLOS:5,ForEXP:3,LOS:2,ThaiTA:2,ThaiTR:1,ThaiEXP:1,ThaiLOS:1};
+var PROV_COUNTS={BKK:2,HKT:1,KBV:1,CNX:3,CRI:0,CBI:0,SNI:1,PKN:2,RYG:3,NMA:2,UBP:0,SKA:1};
+var X_FREQ={"X5(SeaTemp)":8,"X4(Shoreline)":7,"X3(PM)":5,"X1(Temp)":3,"X2(Rain)":2};
+var Y_FREQ={LOS:4,ThaiTR:2,ThaiTA:2,ForLOS:2,ForEXP:1,TA:1,ForTA:1,ForTR:1,ThaiEXP:1,EXP:1};
 var ALL_PROVS=["BKK","HKT","KBV","CNX","CRI","CBI","SNI","PKN","RYG","NMA","UBP","SKA"];
-var rankedProvs=["PKN","CNX","RYG","KBV","BKK","HKT"];
+var rankedProvs=["CNX","RYG","PKN","BKK","NMA","KBV","SKA","SNI","HKT"];
 var noModel=ALL_PROVS.filter(function(p){return PROV_COUNTS[p]===0});
 function mks(n,base,amp){var d=[];for(var i=0;i<n;i++){var v=base+Math.sin(i*0.5)*amp;d.push({idx:i+1,actual:+(v+(Math.random()-0.5)*amp*0.4).toFixed(3),predicted:+v.toFixed(3)})}return d}
 var MODELS={
   PKN:[
-    {y_var:"ForEXP",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.8418,adj_r2:0.8267,f_stat:55.8659,f_p:3.9e-9,n:24,error_df:21,dw:1.9668,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[1.929303,0.069175,1.554946],se:[0.627182,0.008453,0.185201],t_stats:[3.0761,8.1837,8.396],p_vals:[0.005729,0.0,0.0],scatter:[{idx:1,actual:10.2,predicted:10.3},{idx:2,actual:10.1,predicted:10.1},{idx:3,actual:12.1,predicted:12.0},{idx:4,actual:11.2,predicted:11.2},{idx:5,actual:11.5,predicted:11.5},{idx:6,actual:11.4,predicted:11.3},{idx:7,actual:13.0,predicted:12.9},{idx:8,actual:12.9,predicted:12.9},{idx:9,actual:14.1,predicted:14.0},{idx:10,actual:15.3,predicted:15.3},{idx:11,actual:14.9,predicted:15.1},{idx:12,actual:16.0,predicted:15.9},{idx:13,actual:15.2,predicted:15.2},{idx:14,actual:16.8,predicted:16.8},{idx:15,actual:17.2,predicted:17.1},{idx:16,actual:17.6,predicted:17.5},{idx:17,actual:18.5,predicted:18.4},{idx:18,actual:18.0,predicted:18.2},{idx:19,actual:19.1,predicted:19.0},{idx:20,actual:20.2,predicted:20.1},{idx:21,actual:19.8,predicted:20.0},{idx:22,actual:21.0,predicted:21.1},{idx:23,actual:21.5,predicted:21.4},{idx:24,actual:22.0,predicted:22.1}]},
-    {y_var:"LOS",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.7011,adj_r2:0.6726,f_stat:24.6305,f_p:3.11e-6,n:24,error_df:21,dw:1.5375,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[10.416352,-0.068487,-2.813365],se:[1.422,0.019,0.420],t_stats:[7.3266,-3.5743,-6.7014],p_vals:[0.0,0.001789,0.000001],scatter:[{idx:1,actual:2.1,predicted:2.2},{idx:2,actual:2.0,predicted:2.1},{idx:3,actual:1.8,predicted:1.9},{idx:4,actual:1.9,predicted:1.8},{idx:5,actual:2.3,predicted:2.2},{idx:6,actual:2.4,predicted:2.3},{idx:7,actual:1.7,predicted:1.8},{idx:8,actual:1.6,predicted:1.7},{idx:9,actual:2.5,predicted:2.4},{idx:10,actual:2.2,predicted:2.3},{idx:11,actual:2.1,predicted:2.0},{idx:12,actual:1.9,predicted:2.0},{idx:13,actual:2.6,predicted:2.5},{idx:14,actual:1.5,predicted:1.6},{idx:15,actual:2.7,predicted:2.6},{idx:16,actual:2.0,predicted:2.1},{idx:17,actual:1.8,predicted:1.9},{idx:18,actual:2.3,predicted:2.2},{idx:19,actual:2.4,predicted:2.5},{idx:20,actual:1.6,predicted:1.7},{idx:21,actual:2.8,predicted:2.7},{idx:22,actual:2.1,predicted:2.2},{idx:23,actual:1.9,predicted:2.0},{idx:24,actual:2.5,predicted:2.4}]},
-    {y_var:"ThaiLOS",type:"Quadratic",x_vars:["X5(SeaTemp)"],data_freq:"Quarterly",r2:0.7064,adj_r2:0.6785,f_stat:25.2654,f_p:2.58e-6,n:24,error_df:21,dw:1.285,var_names:["Constant","X5(SeaTemp)","X5(SeaTemp)²"],coefs:[83.330646,-5.25383,0.084841],se:[21.3,1.43,0.024],t_stats:[3.9132,-3.675,3.5397],p_vals:[0.000799,0.001409,0.001941],scatter:[{idx:1,actual:1.8,predicted:1.9},{idx:2,actual:2.0,predicted:1.9},{idx:3,actual:1.6,predicted:1.7},{idx:4,actual:2.1,predicted:2.0},{idx:5,actual:2.3,predicted:2.2},{idx:6,actual:1.9,predicted:2.0},{idx:7,actual:1.5,predicted:1.6},{idx:8,actual:2.4,predicted:2.3},{idx:9,actual:1.7,predicted:1.8},{idx:10,actual:2.2,predicted:2.1},{idx:11,actual:2.0,predicted:2.1},{idx:12,actual:1.8,predicted:1.9},{idx:13,actual:2.5,predicted:2.4},{idx:14,actual:1.6,predicted:1.7},{idx:15,actual:2.1,predicted:2.0},{idx:16,actual:2.3,predicted:2.2},{idx:17,actual:1.9,predicted:2.0},{idx:18,actual:1.7,predicted:1.8},{idx:19,actual:2.4,predicted:2.3},{idx:20,actual:2.0,predicted:2.1},{idx:21,actual:1.5,predicted:1.6},{idx:22,actual:2.2,predicted:2.1},{idx:23,actual:2.6,predicted:2.5},{idx:24,actual:1.8,predicted:1.9}]}
-  ],
-  BKK:[
-    {y_var:"ForLOS",type:"Cubic",x_vars:["X5(SeaTemp)"],data_freq:"Quarterly",r2:0.7734,adj_r2:0.7395,f_stat:22.7583,f_p:1.17e-6,n:24,error_df:20,dw:1.6004,var_names:["Constant","X5(SeaTemp)","X5(SeaTemp)²","X5(SeaTemp)³"],coefs:[4481.035701,-441.540125,14.506072,-0.158744],se:[1198.8,120.3,4.02,0.045],t_stats:[3.7377,-3.6695,3.6069,-3.5463],p_vals:[0.001298,0.001522,0.00176,0.002026],scatter:[{idx:1,actual:4.2,predicted:4.3},{idx:2,actual:3.9,predicted:4.0},{idx:3,actual:4.5,predicted:4.4},{idx:4,actual:3.8,predicted:3.9},{idx:5,actual:4.1,predicted:4.0},{idx:6,actual:4.6,predicted:4.5},{idx:7,actual:3.7,predicted:3.8},{idx:8,actual:4.3,predicted:4.2},{idx:9,actual:4.0,predicted:4.1},{idx:10,actual:3.6,predicted:3.7},{idx:11,actual:4.4,predicted:4.3},{idx:12,actual:4.7,predicted:4.6},{idx:13,actual:3.5,predicted:3.6},{idx:14,actual:4.2,predicted:4.1},{idx:15,actual:4.8,predicted:4.7},{idx:16,actual:3.9,predicted:4.0},{idx:17,actual:4.1,predicted:4.0},{idx:18,actual:4.5,predicted:4.4},{idx:19,actual:3.8,predicted:3.9},{idx:20,actual:4.3,predicted:4.2},{idx:21,actual:4.6,predicted:4.5},{idx:22,actual:3.7,predicted:3.8},{idx:23,actual:4.0,predicted:4.1},{idx:24,actual:4.4,predicted:4.3}]},
-    {y_var:"ForLOS",type:"Quadratic",x_vars:["X5(SeaTemp)"],data_freq:"Quarterly",r2:0.6649,adj_r2:0.633,f_stat:20.83,f_p:1.0e-5,n:24,error_df:21,dw:1.47,var_names:["Constant","X5(SeaTemp)","X5(SeaTemp)²"],coefs:[120.5,-7.8,0.131],se:[30.1,2.06,0.035],t_stats:[4.0,-3.79,3.74],p_vals:[0.0007,0.001,0.0012],scatter:mks(24,4.1,0.4)},
-    {y_var:"LOS",type:"Cubic",x_vars:["X5(SeaTemp)"],data_freq:"Quarterly",r2:0.6547,adj_r2:0.603,f_stat:12.64,f_p:8.4e-5,n:24,error_df:20,dw:1.51,var_names:["Constant","X5(SeaTemp)","X5(SeaTemp)²","X5(SeaTemp)³"],coefs:[3200.1,-320.5,10.7,-0.119],se:[900,89,2.97,0.033],t_stats:[3.56,-3.6,3.6,-3.6],p_vals:[0.002,0.0018,0.0018,0.0018],scatter:mks(24,3.8,0.35)}
+    {y_var:"ForEXP",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.842,adj_r2:0.827,f_stat:55.9,f_p:3.91e-9,n:24,error_df:21,dw:1.967,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[1.9293,0.069175,1.5549],se:[0.62718,0.0084527,0.1852],t_stats:[3.0761,8.1837,8.396],p_vals:[0.0057291,5.7116e-8,3.7631e-8],scatter:mks(24,1.2,0.3)},
+    {y_var:"LOS",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.701,adj_r2:0.673,f_stat:24.6,f_p:3.11e-6,n:24,error_df:21,dw:1.537,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[10.416,-0.068487,-2.8134],se:[1.4217,0.019161,0.41982],t_stats:[7.3266,-3.5743,-6.7014],p_vals:[3.2728e-7,0.0017891,1.2442e-6],scatter:mks(24,1.1,0.3)}
   ],
   CNX:[
-    {y_var:"ThaiTR",type:"Quadratic",x_vars:["X1(Temp)"],data_freq:"Quarterly",r2:0.7698,adj_r2:0.7478,f_stat:35.1038,f_p:2.0e-7,n:24,error_df:21,dw:2.1164,var_names:["Constant","X1(Temp)","X1(Temp)²"],coefs:[42495162985.37,-2862758654.35,49701671.74],se:[7600000000,554000000,10060000],t_stats:[5.5909,-5.1668,4.9415],p_vals:[0.000015,0.00004,0.000069],scatter:mks(24,6.5,0.8)},
-    {y_var:"ThaiTA",type:"Quadratic",x_vars:["X1(Temp)"],data_freq:"Quarterly",r2:0.7385,adj_r2:0.7136,f_stat:29.6481,f_p:7.7e-7,n:24,error_df:21,dw:1.8398,var_names:["Constant","X1(Temp)","X1(Temp)²"],coefs:[9932091.46,-664290.43,11546.9],se:[1887000,137600,2497],t_stats:[5.2618,-4.8277,4.6228],p_vals:[0.000032,0.00009,0.000147],scatter:mks(24,6.2,0.7)},
-    {y_var:"TA",type:"Log-Log",x_vars:["X1(Temp)","X3(PM)"],data_freq:"Quarterly",r2:0.7378,adj_r2:0.7129,f_stat:29.5521,f_p:7.9e-7,n:24,error_df:21,dw:2.3358,var_names:["Constant","X1(Temp)","X3(PM)"],coefs:[17.674758,-1.389096,0.106314],se:[0.714,0.2135,0.0281],t_stats:[24.759,-6.5052,3.7853],p_vals:[0.0,0.000002,0.001084],scatter:mks(24,13.8,0.5)}
+    {y_var:"ThaiTR",type:"Quadratic",x_vars:["X1(Temp)"],data_freq:"Quarterly",r2:0.77,adj_r2:0.748,f_stat:35.1,f_p:2.01e-7,n:24,error_df:21,dw:2.116,var_names:["Constant","X1(Temp)","X1(Temp)²"],coefs:[42495000000,-2862800000,49702000],se:[7600700000,554070000,10058000],t_stats:[5.5909,-5.1668,4.9415],p_vals:[0.000015066,0.000040469,0.000068828],scatter:mks(24,6.5,0.8)},
+    {y_var:"ThaiTA",type:"Quadratic",x_vars:["X1(Temp)"],data_freq:"Quarterly",r2:0.738,adj_r2:0.714,f_stat:29.6,f_p:7.66e-7,n:24,error_df:21,dw:1.840,var_names:["Constant","X1(Temp)","X1(Temp)²"],coefs:[9932100,-664290,11547],se:[1887600,137600,2497.8],t_stats:[5.2618,-4.8277,4.6228],p_vals:[0.000032386,0.000090113,0.00014671],scatter:mks(24,10.5,0.4)},
+    {y_var:"TA",type:"Log-Log",x_vars:["X1(Temp)","X3(PM)"],data_freq:"Quarterly",r2:0.738,adj_r2:0.713,f_stat:29.6,f_p:7.85e-7,n:24,error_df:21,dw:2.336,var_names:["Constant","X1(Temp)","X3(PM)"],coefs:[17.675,-1.3891,0.10631],se:[0.71387,0.21354,0.028086],t_stats:[24.759,-6.5052,3.7853],p_vals:[5.0542e-17,1.912e-6,0.0010844],scatter:mks(24,13.8,0.5)}
   ],
   RYG:[
-    {y_var:"ForLOS",type:"Log-Log",x_vars:["X2(Rain)","X3(PM)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Monthly",r2:0.7291,adj_r2:0.7119,f_stat:42.3958,f_p:0.0,n:68,error_df:63,dw:0.5679,var_names:["Constant","X2(Rain)","X3(PM)","X4(Shoreline)","X5(SeaTemp)"],coefs:[9.509318,0.009281,-0.052812,-0.05552,-2.440593],se:[0.743,0.00457,0.01922,0.0066,0.2112],t_stats:[12.8041,2.0312,-2.748,-8.4111,-11.5589],p_vals:[0.0,0.046462,0.00781,0.0,0.0],scatter:mks(24,1.2,0.3)},
-    {y_var:"ForLOS",type:"Log-Log",x_vars:["X1(Temp)","X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Monthly",r2:0.7222,adj_r2:0.7046,f_stat:40.9518,f_p:0.0,n:68,error_df:63,dw:0.5194,var_names:["Constant","X1(Temp)","X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],coefs:[7.656164,0.596897,0.01277,-0.043595,-2.530434],se:[0.697,0.2478,0.00428,0.0077,0.2425],t_stats:[10.9798,2.4083,2.9865,-5.6641,-10.434],p_vals:[0.0,0.018967,0.004016,0.0,0.0],scatter:mks(24,1.1,0.3)},
-    {y_var:"ForLOS",type:"Log-Log",x_vars:["X3(PM)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.7145,adj_r2:0.6717,f_stat:16.6849,f_p:1.145e-5,n:24,error_df:20,dw:2.046,var_names:["Constant","X3(PM)","X4(Shoreline)","X5(SeaTemp)"],coefs:[9.724373,-0.077374,-0.063855,-2.471111],se:[1.368,0.03267,0.01295,0.3889],t_stats:[7.1101,-2.3685,-4.9301,-6.3519],p_vals:[0.000001,0.028042,0.000081,0.000003],scatter:mks(24,1.3,0.25)}
+    {y_var:"ForLOS",type:"Log-Log",x_vars:["X3(PM)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.715,adj_r2:0.672,f_stat:16.7,f_p:1.15e-5,n:24,error_df:20,dw:2.046,var_names:["Constant","X3(PM)","X4(Shoreline)","X5(SeaTemp)"],coefs:[9.7244,-0.077374,-0.063855,-2.4711],se:[1.3677,0.032667,0.012952,0.38904],t_stats:[7.1101,-2.3685,-4.9301,-6.3519],p_vals:[6.8541e-7,0.028042,0.000080731,3.3721e-6],scatter:mks(24,1.2,0.3)},
+    {y_var:"ForTA",type:"Log-Log",x_vars:["X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.617,adj_r2:0.556,f_stat:10.2,f_p:0.000324,n:23,error_df:19,dw:1.941,var_names:["Constant","X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],coefs:[-3.1806,-0.21826,0.21297,4.3646],se:[4.3577,0.088954,0.044637,1.3421],t_stats:[-0.72989,-2.4536,4.7712,3.252],p_vals:[0.47436,0.023965,0.00013279,0.0041948],scatter:mks(24,1.1,0.3)},
+    {y_var:"ForTR",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.608,adj_r2:0.571,f_stat:16.3,f_p:5.31e-5,n:24,error_df:21,dw:2.298,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[9.2878,0.24689,2.784],se:[3.818,0.043504,1.1264],t_stats:[2.4327,5.6751,2.4716],p_vals:[0.024015,0.000012407,0.02209],scatter:mks(24,1.3,0.25)}
   ],
-  SKA:[],
   KBV:[
-    {y_var:"ThaiEXP",type:"Log-Log",x_vars:["X2(Rain)","X3(PM)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.6756,adj_r2:0.6073,f_stat:9.89,f_p:0.00019,n:24,error_df:19,dw:1.55,var_names:["Constant","X2(Rain)","X3(PM)","X4(Shoreline)","X5(SeaTemp)"],coefs:[3.1,0.08,0.15,0.07,1.2],se:[1.2,0.03,0.05,0.02,0.35],t_stats:[2.58,2.67,3.0,3.5,3.43],p_vals:[0.018,0.015,0.007,0.002,0.003],scatter:mks(24,6.8,0.4)},
-    {y_var:"ForEXP",type:"Log-Log",x_vars:["X2(Rain)","X3(PM)","X4(Shoreline)"],data_freq:"Quarterly",r2:0.6512,adj_r2:0.5989,f_stat:12.46,f_p:9.5e-5,n:24,error_df:20,dw:1.48,var_names:["Constant","X2(Rain)","X3(PM)","X4(Shoreline)"],coefs:[5.8,0.06,0.11,0.055],se:[1.5,0.025,0.04,0.018],t_stats:[3.87,2.4,2.75,3.06],p_vals:[0.001,0.026,0.012,0.006],scatter:mks(24,7.5,0.35)},
-    {y_var:"EXP",type:"Log-Log",x_vars:["X2(Rain)","X3(PM)","X4(Shoreline)"],data_freq:"Quarterly",r2:0.6401,adj_r2:0.5862,f_stat:11.86,f_p:0.00012,n:24,error_df:20,dw:1.52,var_names:["Constant","X2(Rain)","X3(PM)","X4(Shoreline)"],coefs:[5.5,0.055,0.1,0.048],se:[1.4,0.023,0.038,0.016],t_stats:[3.93,2.39,2.63,3.0],p_vals:[0.001,0.027,0.016,0.007],scatter:mks(24,7.2,0.35)}
+    {y_var:"LOS",type:"Cubic",x_vars:["X3(PM)"],data_freq:"Quarterly",r2:0.633,adj_r2:0.578,f_stat:11.5,f_p:0.000135,n:24,error_df:20,dw:1.826,var_names:["Constant","X3(PM)","X3(PM)²","X3(PM)³"],coefs:[17.068,-2.924,0.19764,-0.0041606],se:[3.6429,0.7295,0.045959,0.00092586],t_stats:[4.6853,-4.0083,4.3003,-4.4937],p_vals:[0.00014218,0.00069004,0.00034861,0.000222],scatter:mks(24,6.8,0.4)}
   ],
-  HKT:[{y_var:"ThaiTA",type:"Cubic",x_vars:["X4(Shoreline)"],data_freq:"Quarterly",r2:0.6735,adj_r2:0.6245,f_stat:13.76,f_p:5.3e-5,n:24,error_df:20,dw:1.62,var_names:["Constant","X4(Shoreline)","X4(Shoreline)²","X4(Shoreline)³"],coefs:[250000,-180000,42000,-3200],se:[65000,48000,11600,880],t_stats:[3.85,-3.75,3.62,-3.64],p_vals:[0.001,0.0013,0.0017,0.0016],scatter:mks(24,12.5,0.6)}],
-  SNI:[],
-  NMA:[],
+  SKA:[
+    {y_var:"LOS",type:"Log-Log",x_vars:["X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.646,adj_r2:0.593,f_stat:12.1,f_p:9.5e-5,n:24,error_df:20,dw:1.959,var_names:["Constant","X2(Rain)","X4(Shoreline)","X5(SeaTemp)"],coefs:[-1.1867,0.08049,-0.069022,0.51332],se:[1.1437,0.015456,0.012511,0.32785],t_stats:[-1.0376,5.2076,-5.5171,1.5657],p_vals:[0.31184,0.000042727,0.000021192,0.13311],scatter:mks(24,2.0,0.3)}
+  ],
+  BKK:[
+    {y_var:"ForLOS",type:"Cubic",x_vars:["X5(SeaTemp)"],data_freq:"Quarterly",r2:0.773,adj_r2:0.752,f_stat:35.8,f_p:1.7e-7,n:24,error_df:21,dw:1.600,var_names:["Constant","X5(SeaTemp)","X5(SeaTemp)²","X5(SeaTemp)³"],coefs:[4481,-441.54,14.506,-0.15874],se:[0.13432,1.3354,0.089761,0.0015018],t_stats:[33361,-330.64,161.61,-105.7],p_vals:[1.3523e-82,1.6278e-40,5.4671e-34,4.0262e-30],scatter:mks(24,4.1,0.4)},
+    {y_var:"LOS",type:"Cubic",x_vars:["X5(SeaTemp)"],data_freq:"Quarterly",r2:0.734,adj_r2:0.709,f_stat:29,f_p:8.97e-7,n:24,error_df:21,dw:2.358,var_names:["Constant","X5(SeaTemp)","X5(SeaTemp)²","X5(SeaTemp)³"],coefs:[769.29,-74.548,2.418,-0.026127],se:[0.042917,0.42668,0.02868,0.00047984],t_stats:[17925,-174.72,84.312,-54.449],p_vals:[6.2569e-77,1.0637e-34,4.5966e-28,4.2891e-24],scatter:mks(24,3.8,0.35)}
+  ],
+  SNI:[
+    {y_var:"ThaiTR",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.604,adj_r2:0.566,f_stat:16,f_p:5.99e-5,n:24,error_df:21,dw:1.914,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[0.60404,0.20224,5.8428],se:[4.0055,0.05297,1.1866],t_stats:[0.1508,3.8179,4.9239],p_vals:[0.88157,0.0010032,0.000071752],scatter:mks(24,22.5,0.5)}
+  ],
+  NMA:[
+    {y_var:"ThaiEXP",type:"Quadratic",x_vars:["X3(PM)"],data_freq:"Quarterly",r2:0.612,adj_r2:0.575,f_stat:16.5,f_p:4.87e-5,n:24,error_df:21,dw:1.710,var_names:["Constant","X3(PM)","X3(PM)²"],coefs:[634.57,-3.2069,0.025059],se:[17.285,0.88473,0.009873],t_stats:[36.713,-3.6247,2.5382],p_vals:[1.5502e-20,0.0015878,0.01913],scatter:mks(24,580,30)},
+    {y_var:"EXP",type:"Quadratic",x_vars:["X3(PM)"],data_freq:"Quarterly",r2:0.601,adj_r2:0.563,f_stat:15.8,f_p:6.46e-5,n:24,error_df:21,dw:1.639,var_names:["Constant","X3(PM)","X3(PM)²"],coefs:[639.47,-3.2374,0.025545],se:[17.571,0.89939,0.010037],t_stats:[36.393,-3.5995,2.5452],p_vals:[1.8579e-20,0.0016854,0.018838],scatter:mks(24,560,28)}
+  ],
+  HKT:[
+    {y_var:"ThaiTA",type:"Cubic",x_vars:["X4(Shoreline)"],data_freq:"Quarterly",r2:0.673,adj_r2:0.624,f_stat:276,f_p:3.42e-17,n:24,error_df:20,dw:1.706,var_names:["Constant","X4(Shoreline)","X4(Shoreline)²","X4(Shoreline)³"],coefs:[406710,-152000,37285,-2670.3],se:[23401,29334,9415.5,809.41],t_stats:[17.38,-5.1817,3.9599,-3.2991],p_vals:[1.5473e-13,0.000045325,0.00077261,0.0035842],scatter:mks(24,12.5,0.6)}
+  ],
   CRI:[],CBI:[],UBP:[]
 };
 var TR_MODELS={
   CNX:[
-    {y_var:"ThaiTR",type:"Quadratic",x_vars:["X1(Temp)"],data_freq:"Quarterly",r2:0.7698,adj_r2:0.7478,f_stat:35.1038,f_p:2.0e-7,n:24,error_df:21,dw:2.1164,var_names:["Constant","X1(Temp)","X1(Temp)²"],coefs:[42495162985.37,-2862758654.35,49701671.74],se:[7600000000,554000000,10060000],t_stats:[5.5909,-5.1668,4.9415],p_vals:[0.000015,0.00004,0.000069],scatter:mks(24,6.5,0.8)},
-    {y_var:"TR",type:"Quadratic",x_vars:["X1(Temp)"],data_freq:"Quarterly",r2:0.728,adj_r2:0.702,f_stat:28.1,f_p:5.0e-7,n:24,error_df:21,dw:2.05,var_names:["Constant","X1(Temp)","X1(Temp)²"],coefs:[55000000000,-3700000000,64000000],se:[9800000000,712000000,12900000],t_stats:[5.61,-5.20,4.96],p_vals:[0.00002,0.00005,0.00008],scatter:mks(24,7.0,0.7)},
-    {y_var:"TR",type:"Log-Log",x_vars:["X1(Temp)","X3(PM)"],data_freq:"Quarterly",r2:0.688,adj_r2:0.658,f_stat:23.2,f_p:7.0e-7,n:24,error_df:21,dw:2.28,var_names:["Constant","X1(Temp)","X3(PM)"],coefs:[18.5,-1.52,0.12],se:[0.82,0.24,0.032],t_stats:[22.56,-6.33,3.75],p_vals:[0.0,0.000003,0.001],scatter:mks(24,7.2,0.6)}
+    {y_var:"ThaiTR",type:"Quadratic",x_vars:["X1(Temp)"],data_freq:"Quarterly",r2:0.77,adj_r2:0.748,f_stat:35.1,f_p:2.01e-7,n:24,error_df:21,dw:2.116,var_names:["Constant","X1(Temp)","X1(Temp)²"],coefs:[42495000000,-2862800000,49702000],se:[7600700000,554070000,10058000],t_stats:[5.5909,-5.1668,4.9415],p_vals:[0.000015066,0.000040469,0.000068828],scatter:mks(24,6.5,0.8)}
   ],
-  SNI:[],
+  SNI:[
+    {y_var:"ThaiTR",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.604,adj_r2:0.566,f_stat:16,f_p:5.99e-5,n:24,error_df:21,dw:1.914,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[0.60404,0.20224,5.8428],se:[4.0055,0.05297,1.1866],t_stats:[0.1508,3.8179,4.9239],p_vals:[0.88157,0.0010032,0.000071752],scatter:mks(24,22.5,0.5)}
+  ],
   RYG:[
-    {y_var:"ForTR",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.612,adj_r2:0.575,f_stat:16.6,f_p:4.5e-5,n:24,error_df:21,dw:1.45,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[28.8,0.042,-6.1],se:[5.5,0.016,1.1],t_stats:[5.24,2.63,-5.55],p_vals:[0.00004,0.016,0.00002],scatter:mks(24,20.5,0.4)}
+    {y_var:"ForTR",type:"Log-Log",x_vars:["X4(Shoreline)","X5(SeaTemp)"],data_freq:"Quarterly",r2:0.608,adj_r2:0.571,f_stat:16.3,f_p:5.31e-5,n:24,error_df:21,dw:2.298,var_names:["Constant","X4(Shoreline)","X5(SeaTemp)"],coefs:[9.2878,0.24689,2.784],se:[3.818,0.043504,1.1264],t_stats:[2.4327,5.6751,2.4716],p_vals:[0.024015,0.000012407,0.02209],scatter:mks(24,20.5,0.4)}
   ]
 };
 var RECS={
@@ -177,7 +182,7 @@ var RECS={
 };
 var currentProv=null;
 var detTabMode=0;
-var trTabMode={CNX:0,RYG:0};
+var trTabMode={CNX:0,SNI:0,RYG:0};
 function switchTab(n){
   document.querySelectorAll('.main-tab').forEach(function(t,i){t.classList.remove('active');if(i===n)t.classList.add('active')});
   document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});
@@ -433,11 +438,11 @@ function detTabClick(prov,idx){
 }
 function renderTRTab(){
   var html='';
-  ['CNX','RYG'].forEach(function(prov){
+  ['CNX','SNI','RYG'].forEach(function(prov){
     html+='<div class="tr-prov-block"><div class="tr-prov-title">'+PROV_FULL[prov]+' ('+prov+')</div><div id="trBlock'+prov+'"></div></div>'
   });
   document.getElementById('trContent').innerHTML=html;
-  ['CNX','RYG'].forEach(function(prov){
+  ['CNX','SNI','RYG'].forEach(function(prov){
     var models=TR_MODELS[prov];
     if(models && models.length>0){
       renderModelBlock('trBlock'+prov,prov,models,0,function(idx){trTabClick(prov,idx)},false)
@@ -501,6 +506,7 @@ function renderMap(){
   var legend='<div style="display:flex;justify-content:center;gap:24px;margin-top:16px;font-size:13px;color:#475569;flex-wrap:wrap">';
   legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#dc2626;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>Top 3</span>';
   legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#ea580c;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>4th–6th</span>';
+  legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#eab308;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>7th–9th</span>';
   legend+='<span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#cbd5e1;display:inline-block;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>No Model</span>';
   legend+='</div>';
   document.getElementById('mapContainer').innerHTML=svg+legend;
