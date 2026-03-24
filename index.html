@@ -316,9 +316,9 @@ function renderOverviewTab(containerId,prov){
   var html='<div class="card"><div class="card-title">Econometric Context</div><div style="background:#dbeafe;border-radius:8px;padding:12px;border-left:4px solid #2563eb"><p style="font-size:12px;line-height:1.6;color:#1e3a5f">';
   r.context.forEach(function(c){html+='• '+c+'<br>'});
   html+='</p></div></div>';
-  /* Model Comparison Table for provinces with 3+ models */
+  /* Model Comparison Table for provinces with 2+ models */
   var models=MODELS[prov];
-  if(models && models.length>=3){
+  if(models && models.length>=2){
     html+='<div class="card"><div class="card-title">📊 Model Comparison</div>';
     html+='<div style="overflow-x:auto"><table class="ct"><thead><tr><th style="text-align:left">Metric</th>';
     models.forEach(function(m,idx){
